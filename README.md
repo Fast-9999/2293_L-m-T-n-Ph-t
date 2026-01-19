@@ -1,3 +1,1 @@
-# 2293_Lam Tan Phat
-# MSSV: 2280602293
-# Họ và Tên: Lâm Tấn Phát 
+# 2293_Lâm Tấn Phát
