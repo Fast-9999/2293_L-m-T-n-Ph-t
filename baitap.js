@@ -1,6 +1,4 @@
-// ==========================================
-// CÂU 1: Khai báo constructor function Product
-// ==========================================
+// Câu 1: Khai báo constructor function Product để tạo đối tượng sản phẩm.
 function Product(id, name, price, quantity, category, isAvailable) {
     this.id = id;
     this.name = name;
@@ -10,96 +8,52 @@ function Product(id, name, price, quantity, category, isAvailable) {
     this.isAvailable = isAvailable;
 }
 
-// ==========================================
-// CÂU 2: Khởi tạo mảng products (5 sản phẩm, 2 danh mục)
-// ==========================================
-// Mình tạo dữ liệu mẫu có cả hàng đắt/rẻ, còn hàng/hết hàng để test các câu dưới
+// Câu 2: Khởi tạo mảng products gồm ít nhất 5 sản phẩm, thuộc tối thiểu 2 danh mục khác nhau.
 const products = [
-    new Product(1, "Chuột Gaming Logitech", 45, 10, "Accessories", true),
-    new Product(2, "Bàn phím cơ", 80, 5, "Accessories", true),
-    new Product(3, "Màn hình Dell", 150, 0, "Electronics", false), // Hết hàng
-    new Product(4, "Lót chuột", 5, 20, "Accessories", true),
-    new Product(5, "Tai nghe Bluetooth", 25, 0, "Electronics", true) // Còn bán nhưng kho = 0
+    new Product(1, "Laptop MSI", 1200, 5, "Electronics", true),
+    new Product(2, "Chuột Logitech", 25, 50, "Accessories", true),
+    new Product(3, "Bàn phím cơ", 45, 0, "Accessories", false),
+    new Product(4, "Màn hình Dell", 300, 10, "Electronics", true),
+    new Product(5, "Lót chuột", 10, 100, "Accessories", true)
 ];
 
-console.log("--- Danh sách sản phẩm ban đầu ---");
-console.log(products);
+// Câu 3: Tạo mảng mới chỉ chứa: name, price của mỗi sản phẩm. (Dùng map)
+const nameAndPrice = products.map(p => ({ name: p.name, price: p.price }));
+console.log("Câu 3:", nameAndPrice);
 
-// ==========================================
-// CÂU 3: Tạo mảng mới chỉ chứa name, price (Dùng .map)
-// ==========================================
-// .map giúp biến đổi mảng này thành mảng khác
-const productBasicInfo = products.map(product => {
-    return { name: product.name, price: product.price };
-});
+// Câu 4: Lọc ra các sản phẩm còn hàng trong kho (quantity > 0). (Dùng filter)
+const inStockProducts = products.filter(p => p.quantity > 0);
+console.log("Câu 4:", inStockProducts);
 
-console.log("\n--- Câu 3: Mảng chỉ có tên và giá ---");
-console.log(productBasicInfo);
+// Câu 5: Kiểm tra xem có ít nhất một sản phẩm có giá trên 30 hay không. (Dùng some)
+const hasExpensiveProduct = products.some(p => p.price > 30);
+console.log("Câu 5:", hasExpensiveProduct);
 
-// ==========================================
-// CÂU 4: Lọc sản phẩm còn hàng trong kho (quantity > 0) (Dùng .filter)
-// ==========================================
-const inStockProducts = products.filter(product => product.quantity > 0);
-
-console.log("\n--- Câu 4: Sản phẩm còn tồn kho (>0) ---");
-console.log(inStockProducts);
-
-// ==========================================
-// CÂU 5: Kiểm tra có ít nhất 1 SP giá trên 30? (Dùng .some)
-// ==========================================
-// .some trả về true nếu có ÍT NHẤT 1 phần tử thỏa mãn
-const hasExpensiveProduct = products.some(product => product.price > 30);
-
-console.log("\n--- Câu 5: Có sản phẩm giá > 30 không? ---");
-console.log(hasExpensiveProduct); // Kết quả: true
-
-// ==========================================
-// CÂU 6: Kiểm tra TẤT CẢ sản phẩm "Accessories" có đang bán không? (Dùng .every)
-// ==========================================
-// Bước 1: Lọc ra nhóm Accessories trước
+// Câu 6: Kiểm tra xem tất cả sản phẩm thuộc danh mục "Accessories" có đang được bán hay không.
+// Lọc danh mục trước, sau đó dùng every để kiểm tra.
 const accessories = products.filter(p => p.category === "Accessories");
-// Bước 2: Kiểm tra tất cả nhóm đó (every trả về true nếu TẤT CẢ đều thỏa mãn)
 const allAccessoriesAvailable = accessories.every(p => p.isAvailable === true);
+console.log("Câu 6:", allAccessoriesAvailable);
 
-console.log("\n--- Câu 6: Tất cả đồ phụ kiện đều đang bán? ---");
-console.log(allAccessoriesAvailable); 
+// Câu 7: Tính tổng giá trị kho hàng. Giá trị kho = price * quantity. (Dùng reduce)
+const totalInventoryValue = products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+console.log("Câu 7:", totalInventoryValue);
 
-// ==========================================
-// CÂU 7: Tính tổng giá trị kho hàng (price * quantity) (Dùng .reduce)
-// ==========================================
-const totalInventoryValue = products.reduce((total, product) => {
-    return total + (product.price * product.quantity);
-}, 0); // 0 là giá trị khởi tạo ban đầu của total
-
-console.log("\n--- Câu 7: Tổng giá trị kho hàng ---");
-console.log(totalInventoryValue);
-
-// ==========================================
-// CÂU 8: Dùng for...of in Tên - Danh mục - Trạng thái
-// ==========================================
-console.log("\n--- Câu 8: Duyệt mảng bằng for...of ---");
-for (const product of products) {
-    console.log(`Tên: ${product.name} | Danh mục: ${product.category} | Đang bán: ${product.isAvailable}`);
+// Câu 8: Dùng for...of Duyệt mảng products và in ra: Tên sản phẩm - Danh mục - Trạng thái
+console.log("Câu 8:");
+for (const p of products) {
+    console.log(`${p.name} - ${p.category} - ${p.isAvailable}`);
 }
 
-// ==========================================
-// CÂU 9: Dùng for...in in tên thuộc tính và giá trị
-// ==========================================
-// for...in dùng để duyệt các KEY (thuộc tính) của 1 đối tượng
-console.log("\n--- Câu 9: Duyệt thuộc tính của sản phẩm đầu tiên ---");
-const firstProduct = products[0]; // Lấy ví dụ sản phẩm đầu tiên
-
-for (const key in firstProduct) {
-    console.log(`${key}: ${firstProduct[key]}`);
+// Câu 9: Dùng for...in để in ra tên thuộc tính và giá trị tương ứng. 
+// (Tui sẽ lấy sản phẩm đầu tiên trong mảng để demo)
+console.log("Câu 9:");
+for (const key in products[0]) {
+    console.log(`${key}: ${products[0][key]}`);
 }
 
-// ==========================================
-// CÂU 10: Lấy danh sách tên SP đang bán (isAvailable) VÀ còn hàng (quantity > 0)
-// ==========================================
-// Kết hợp filter (lọc) và map (lấy tên)
-const activeProductNames = products
-    .filter(p => p.isAvailable === true && p.quantity > 0) // Lọc trước
-    .map(p => p.name); // Chỉ lấy tên sau
-
-console.log("\n--- Câu 10: Tên các SP đang bán và còn hàng ---");
-console.log(activeProductNames);
+// Câu 10: Lấy danh sách tên các sản phẩm đang bán (isAvailable = true) và còn hàng (quantity > 0)
+const sellingAndInStockNames = products
+    .filter(p => p.isAvailable && p.quantity > 0)
+    .map(p => p.name);
+console.log("Câu 10:", sellingAndInStockNames);
